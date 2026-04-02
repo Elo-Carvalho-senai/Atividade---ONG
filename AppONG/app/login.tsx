@@ -1,7 +1,33 @@
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, Image } from "react-native";
 import { router } from "expo-router";
+import { useState } from "react";
 
 export default function Login() {
+
+  // Estado para armazenar email e senha
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+
+  // Função de login com validação
+  const handleLogin = () => {
+
+    console.table({ email, senha });
+
+    // Validação extra (campos vazios)
+    if (!email || !senha) {
+      console.log("⚠️ Preencha todos os campos");
+      return;
+    }
+
+    // Validação principal
+    if (email.includes("@") && senha.length > 6) {
+      console.log("✅ Acesso autorizado para:", email);
+      // Futuramente: router.push('/home');
+    } else {
+      console.log("❌ Falha no login: E-mail inválido ou senha muito curta.");
+    }
+  };
+
   return (
     <View style={styles.container}>
 
@@ -14,17 +40,30 @@ export default function Login() {
         <TextInput
           style={styles.input}
           placeholder="Email"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          value={email}
+          onChangeText={setEmail}
         />
 
         <TextInput
           style={styles.input}
           placeholder="Senha"
           secureTextEntry={true}
+          value={senha}
+          onChangeText={setSenha}
         />
+
+        {/* Feedback visual do estado */}
+        {email.length > 0 && (
+          <Text style={styles.helper}>
+            Logando como: {email}
+          </Text>
+        )}
 
         <TouchableOpacity
           style={styles.loginButton}
-          onPress={() => console.log("Login pressionado")}
+          onPress={handleLogin}
         >
           <Text style={styles.buttonText}>Entrar</Text>
         </TouchableOpacity>
@@ -80,6 +119,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 12,
     marginBottom: 15,
+  },
+
+  helper: {
+    fontSize: 12,
+    color: '#555',
+    marginBottom: 10,
   },
 
   loginButton: {
