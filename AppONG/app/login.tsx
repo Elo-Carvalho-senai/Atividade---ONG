@@ -8,38 +8,38 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
-  const handleLogin = () => {
-    // 1. Validação: Verifica se o nome não está vazio (Objetivo 3)
-    if (!nome.trim()) {
-      Alert.alert("Erro", "Por favor, digite seu nome de voluntário.");
-      return;
-    }
+const handleLogin = () => {
 
-    if (!email || !senha) {
-      Alert.alert("Erro", "Preencha todos os campos");
-      return;
-    }
+  if (!nome.trim()) {
+    Alert.alert("Erro", "Por favor, digite seu nome de voluntário.");
+    return;
+  }
 
-    // 2. Validação de formato (seguindo seu código base)
-    if (email.includes("@") && senha.length > 4) {
+  if (!email || !senha) {
+    Alert.alert("Erro", "Preencha todos os campos");
+    return;
+  }
 
-      // 3. Gerar ID aleatório (Objetivo 3)
-      const voluntarioId = Math.floor(Math.random() * 10000).toString();
+  if (email.includes("@") && senha.length >= 4) {
 
-      // 4. Navegação para Dashboard enviando parâmetros (Habilidade S)
-      router.push({
-        pathname: "/dashboard",
-        params: {
-          nome: nome,
-          id: "123"
-        }
-      });
+    // 🔥 GERA O ID AQUI
+    const idGerado = Date.now().toString();
 
-      console.log(`✅ Indo para Dashboard: ${nome} (ID: ${voluntarioId})`);
-    } else {
-      Alert.alert("Erro", "E-mail inválido ou senha muito curta.");
-    }
-  };
+    console.log(`✅ Indo para Dashboard: ${nome} (ID: ${idGerado})`);
+
+    // 🔥 NAVEGAÇÃO CORRETA
+    router.push({
+      pathname: "/dashboard",
+      params: {
+        nome: nome,
+        id: idGerado
+      }
+    });
+
+  } else {
+    Alert.alert("Erro", "E-mail inválido ou senha muito curta.");
+  }
+};
 
   return (
     <View style={styles.container}>
