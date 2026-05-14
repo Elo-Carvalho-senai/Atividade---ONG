@@ -1,148 +1,270 @@
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, Image, Alert } from "react-native";
-import { router } from "expo-router";
-import { useState } from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  Image,
+} from 'react-native';
 
-export default function Login() {
-  // Estado para capturar o nome do voluntário (Objetivo 3)
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+import { router } from 'expo-router';
 
-const handleLogin = () => {
+import { useState } from 'react';
 
-  if (!nome.trim()) {
-    Alert.alert("Erro", "Por favor, digite seu nome de voluntário.");
-    return;
-  }
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-  if (!email || !senha) {
-    Alert.alert("Erro", "Preencha todos os campos");
-    return;
-  }
+export default function LoginScreen() {
 
-  if (email.includes("@") && senha.length >= 4) {
+  const [nome, setNome] = useState('');
 
-    // 🔥 GERA O ID AQUI
-    const idGerado = Date.now().toString();
+  const [email, setEmail] = useState('');
 
-    console.log(`✅ Indo para Dashboard: ${nome} (ID: ${idGerado})`);
+  const [senha, setSenha] = useState('');
 
-    // 🔥 NAVEGAÇÃO CORRETA
+  function entrar() {
+
+    if (!nome || !email || !senha) {
+
+      Alert.alert(
+        'Erro',
+        'Preencha todos os campos.'
+      );
+
+      return;
+    }
+
+    if (!email.includes('@')) {
+
+      Alert.alert(
+        'Erro',
+        'Digite um e-mail válido.'
+      );
+
+      return;
+    }
+
+    if (senha.length < 4) {
+
+      Alert.alert(
+        'Erro',
+        'A senha deve ter pelo menos 4 caracteres.'
+      );
+
+      return;
+    }
+
     router.push({
-      pathname: "/dashboard",
+      pathname: '/(tabs)/perfil',
       params: {
-        nome: nome,
-        id: idGerado
-      }
+        userName: nome,
+      },
     });
-
-  } else {
-    Alert.alert("Erro", "E-mail inválido ou senha muito curta.");
   }
-};
 
   return (
-    <View style={styles.container}>
-      <Image source={require('../assets/images/logo.png')} style={styles.logo} />
 
-      <Text style={styles.title}>Login</Text>
+    <View style={styles.container}>
+
+      {/* TOPO */}
+
+      <View style={styles.topContainer}>
+
+        <Image
+          source={require('../assets/images/logo.png')}
+          style={styles.logo}
+        />
+
+        <Text style={styles.title}>
+          ONG Connect
+        </Text>
+
+        <Text style={styles.subtitle}>
+          Conectando voluntários a causas que transformam vidas.
+        </Text>
+
+      </View>
+
+      {/* CARD */}
 
       <View style={styles.card}>
-        {/* Input para capturar o nome do voluntário */}
-        <TextInput
-          style={styles.input}
-          placeholder="Nome do Voluntário"
-          value={nome}
-          onChangeText={setNome}
-        />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          value={email}
-          onChangeText={setEmail}
-        />
+        {/* NOME */}
 
-        <TextInput
-          style={styles.input}
-          placeholder="Senha"
-          secureTextEntry={true}
-          value={senha}
-          onChangeText={setSenha}
-        />
+        <View style={styles.inputContainer}>
+
+          <Ionicons
+            name="person"
+            size={20}
+            color="#6b7280"
+          />
+
+          <TextInput
+            placeholder="Nome do voluntário"
+            style={styles.input}
+            value={nome}
+            onChangeText={setNome}
+          />
+
+        </View>
+
+        {/* EMAIL */}
+
+        <View style={styles.inputContainer}>
+
+          <Ionicons
+            name="mail"
+            size={20}
+            color="#6b7280"
+          />
+
+          <TextInput
+            placeholder="Digite seu e-mail"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+          />
+
+        </View>
+
+        {/* SENHA */}
+
+        <View style={styles.inputContainer}>
+
+          <Ionicons
+            name="lock-closed"
+            size={20}
+            color="#6b7280"
+          />
+
+          <TextInput
+            placeholder="Digite sua senha"
+            secureTextEntry
+            style={styles.input}
+            value={senha}
+            onChangeText={setSenha}
+          />
+
+        </View>
+
+        {/* BOTÃO */}
 
         <TouchableOpacity
-          style={styles.loginButton}
-          onPress={handleLogin}
+          style={styles.button}
+          onPress={entrar}
         >
-          <Text style={styles.buttonText}>Entrar</Text>
+
+          <Text style={styles.buttonText}>
+            Entrar
+          </Text>
+
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Text style={styles.backText}>Voltar</Text>
-        </TouchableOpacity>
+        {/* TEXTO EXTRA */}
+
+        <Text style={styles.footerText}>
+          Juntos podemos transformar comunidades 💚
+        </Text>
+
       </View>
+
     </View>
   );
 }
 
-// ... Estilos permanecem os mesmos
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
-    backgroundColor: '#1e88e5',
+    backgroundColor: '#f4f7fb',
     justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 25,
+    padding: 25,
   },
+
+  topContainer: {
+    alignItems: 'center',
+    marginBottom: 35,
+  },
+
   logo: {
     width: 110,
     height: 110,
-    marginBottom: 10,
-    resizeMode: 'contain',
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 20,
-  },
-  card: {
-    width: '100%',
-    backgroundColor: '#ffffff',
-    padding: 25,
-    borderRadius: 20,
-  },
-  input: {
-    width: '100%',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 10,
-    padding: 12,
     marginBottom: 15,
   },
-  loginButton: {
+
+  title: {
+    fontSize: 38,
+    fontWeight: 'bold',
+    color: '#1e88e5',
+    marginBottom: 10,
+  },
+
+  subtitle: {
+    fontSize: 16,
+    color: '#6b7280',
+    textAlign: 'center',
+    paddingHorizontal: 15,
+  },
+
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 30,
+    padding: 25,
+
+    elevation: 6,
+
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+  },
+
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+
+    backgroundColor: '#f4f7fb',
+
+    borderRadius: 16,
+
+    paddingHorizontal: 15,
+
+    marginBottom: 18,
+
+    height: 58,
+  },
+
+  input: {
+    flex: 1,
+    marginLeft: 10,
+    fontSize: 16,
+    color: '#1f2937',
+  },
+
+  button: {
     backgroundColor: '#34a853',
-    padding: 14,
-    borderRadius: 10,
+    padding: 18,
+    borderRadius: 18,
     alignItems: 'center',
+    marginTop: 10,
   },
-  backButton: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
+
   buttonText: {
     color: '#fff',
-    fontWeight: '600',
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: 'bold',
   },
-  backText: {
-    color: '#1e88e5',
-    fontWeight: '600',
+
+  footerText: {
+    textAlign: 'center',
+    marginTop: 20,
+    color: '#6b7280',
+    fontSize: 14,
   },
 });

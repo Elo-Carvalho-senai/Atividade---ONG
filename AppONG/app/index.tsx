@@ -1,110 +1,105 @@
-import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { Link, Stack, useLocalSearchParams } from "expo-router";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
 
-export default function Index() {
+import { router } from 'expo-router';
 
-  // 🔥 recebendo parâmetros
-  const { nome, id } = useLocalSearchParams();
+import { useState } from 'react';
+
+export default function LoginScreen() {
+
+  const [nome, setNome] = useState('');
+
+  function entrar() {
+
+    router.push({
+      pathname: '/(tabs)/perfil',
+      params: {
+        userName: nome,
+      },
+    });
+  }
 
   return (
+
     <View style={styles.container}>
-      
-      <Stack.Screen 
-        options={{ 
-          headerShown: false,
-          title: "Início" 
-        }} 
+
+      <Text style={styles.title}>
+        ONG Connect
+      </Text>
+
+      <Text style={styles.subtitle}>
+        Conectando voluntários a causas sociais 💚
+      </Text>
+
+      <TextInput
+        placeholder="Digite seu nome"
+        style={styles.input}
+        value={nome}
+        onChangeText={setNome}
       />
-      
-      <Image source={require('../assets/images/logo.png')} style={styles.logo} />
 
-      <Text style={styles.title}>ONG Connect</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={entrar}
+      >
 
-      {/* 👇 NOVO: exibição do usuário */}
-      {nome && (
-        <Text style={styles.userInfo}>
-          Olá, {nome} (ID: {id})
-        </Text>
-      )}
-
-      <View style={styles.header}>
-        <Text style={styles.subtitle}>
-          Ponte entre a solidariedade e a necessidade.
+        <Text style={styles.buttonText}>
+          Entrar
         </Text>
 
-        <Link href="/projetos" asChild>
-          <TouchableOpacity style={styles.primaryButton}>
-            <Text style={styles.buttonText}>Conhecer Projetos</Text>
-          </TouchableOpacity>
-        </Link>
+      </TouchableOpacity>
 
-        <Link href="/login" asChild>
-          <TouchableOpacity style={styles.secondaryButton}>
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
-        </Link>
-      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#1e88e5',
-    paddingHorizontal: 25,
+    padding: 30,
+    backgroundColor: '#f4f7fb',
   },
-  logo: {
-    width: 120,
-    height: 120,
-    marginBottom: 15,
-    resizeMode: 'contain',
-  },
+
   title: {
-    fontSize: 32,
+    fontSize: 42,
     fontWeight: 'bold',
-    color: '#ffffff',
-    marginBottom: 20,
-    letterSpacing: 1,
+    color: '#1e88e5',
+    marginBottom: 10,
   },
-  header: {
-    width: '100%',
-    padding: 25,
-    backgroundColor: '#ffffff',
-    alignItems: 'center',
-    borderRadius: 20,
-  },
+
   subtitle: {
     fontSize: 16,
-    textAlign: 'center',
-    color: '#555',
-    marginBottom: 25,
+    color: '#6b7280',
+    marginBottom: 40,
   },
-  primaryButton: {
-    width: '100%',
+
+  input: {
+    backgroundColor: '#fff',
+    padding: 18,
+    borderRadius: 18,
+    fontSize: 16,
+    marginBottom: 20,
+
+    elevation: 3,
+  },
+
+  button: {
     backgroundColor: '#34a853',
-    paddingVertical: 14,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  secondaryButton: {
-    width: '100%',
-    backgroundColor: '#ea4335',
-    paddingVertical: 14,
-    borderRadius: 10,
+    padding: 18,
+    borderRadius: 18,
     alignItems: 'center',
   },
+
   buttonText: {
     color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
-  userInfo: {
-  color: '#ffffff',
-  fontSize: 16,
-  marginBottom: 15,
-},
 });
